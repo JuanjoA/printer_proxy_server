@@ -6,7 +6,8 @@ from OpenSSL import SSL
 from flask import Flask
 from flask_cors import cross_origin
 from flask_jsonrpc import JSONRPC
-from flask.ext.httpauth import HTTPBasicAuth
+from flask_httpauth import HTTPBasicAuth
+
 from printer import PrinterController
 from header_decorators import json_headers
 
@@ -23,10 +24,11 @@ args = parser.parse_args()
 
 app = Flask(__name__)
 auth = HTTPBasicAuth()
-jsonrpc = JSONRPC(app, "/api", decorators=[
-    cross_origin(methods=['POST', 'OPTIONS'], headers=["accept", "authorization", "content-type"]),
-    json_headers
-])
+# jsonrpc = JSONRPC(app, "/api", decorators=[
+#     cross_origin(methods=['POST', 'OPTIONS'], headers=["accept", "authorization", "content-type"]),
+#     json_headers
+# ])
+jsonrpc = JSONRPC(app, "/api")
 
 
 # Not a route on purpose.
@@ -98,10 +100,10 @@ def run():
     db.close()
 
     # Setup SSL cert
-    ssl_context = SSL.Context(SSL.SSLv23_METHOD)
-    ssl_context.use_privatekey_file(ROOT_DIR + '/server.key')
-    ssl_context.use_certificate_file(ROOT_DIR + '/server.crt')
-
+    # ssl_context = SSL.Context(SSL.SSLv23_METHOD)
+    # ssl_context.use_privatekey_file(ROOT_DIR + '/server.key')
+    # ssl_context.use_certificate_file(ROOT_DIR + '/server.crt')
+    ssl_context = ('server.crt', 'server.key')
     app.run(debug=True, port=int(args.port), ssl_context=ssl_context)
 
 	
