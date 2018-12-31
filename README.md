@@ -53,3 +53,9 @@ Assumes the printer is named "zebra" by default.
     user|494c884325be4798032547ee6525d03d8bf96977d623a2ebafa0095bf5b194dd|4f1a6f06-c8fd-4526-a375-986fa298c36b
 
     sqlite> .q
+
+
+## Links
+
+    https://localhost:8443/api/browse/#/   (GET)
+    https://localhost.santafixie.com:8443/api/  (JSON)
