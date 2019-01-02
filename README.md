@@ -59,3 +59,7 @@ Assumes the printer is named "zebra" by default.
 
     https://localhost:8443/api/browse/#/   (GET)
     https://localhost.santafixie.com:8443/api/  (JSON)
+
+## More
+
+For unix systems this app uses _lpr -Pprinter_name_ command to print (_helpers/zebra.py_).

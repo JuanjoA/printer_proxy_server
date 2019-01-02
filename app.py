@@ -1,19 +1,15 @@
+# -*- coding: utf-8 -*-
 # Explicit import to enable 'python app.py'
 import __init__ 
 
 import argparse, hashlib, inspect, os, sqlite3, uuid
 from OpenSSL import SSL
-from flask import Flask
-from flask_cors import CORS, cross_origin
+from flask import Flask, request
 from flask_jsonrpc import JSONRPC
 from flask_httpauth import HTTPBasicAuth
 
 from printer import PrinterController
-#from header_decorators import json_headers
-
-# import logging
-# logging.getLogger('flask_cors').level = logging.DEBUG
-
+# from header_decorators import json_headers
 
 
 ROOT_DIR = os.path.dirname(os.path.abspath(inspect.getfile(inspect.currentframe())))
@@ -29,28 +25,16 @@ args = parser.parse_args()
 
 app = Flask(__name__)
 
-# CORS for all routes:       
-# CORS(app)
-# CORS for some routes:
-#CORS(app, resources=r'/api/*')
+@app.after_request
+def add_headers(response):
+    """ Hook before send response to add headers (CORS) """
+    response.headers.add('Access-Control-Allow-Origin', '*')
+    response.headers.add('Access-Control-Allow-Headers', 'Content-Type,Authorization')
+    return response
 
-# app.config['CORS_HEADERS'] = 'application/json'
-
-# CORS by route/method/...
-# cors = CORS(
-#     app, 
-#     resources={r"/api/*": {"origins": "*"}},
-#     methods=['POST', 'OPTIONS'],
-#     headers=["accept", "authorization", "content-type", "Access-Control-Allow-Origin"]
-# )
 
 auth = HTTPBasicAuth()
-# jsonrpc = JSONRPC(app, "/api", decorators=[
-#     cross_origin(methods=['POST', 'OPTIONS'], headers=["accept", "authorization", "content-type"]),
-#     json_headers
-# ])
 jsonrpc = JSONRPC(app, "/api", enable_web_browsable_api=True)
-
 
 # Not a route on purpose.
 # Use an interactive Python shell to add users.
@@ -99,6 +83,19 @@ def index():
     return "SSL exception added for this session."
 
 
+
+# @json_headers
+# @jsonrpc.method('App.decorators')
+# #@auth.login_required  
+# def decorators():
+#     """ 
+#     Debug JSONRPC method to show headers in http://ip:8443/api/browse
+#     """
+#     return {
+#         'headers': str(request.headers)
+#     }
+
+#@json_headers
 @jsonrpc.method("output")
 @auth.login_required
 def output(printer_name=None, format="epl2", data=[], length=6, width=4, raw=False):
@@ -122,9 +119,6 @@ def run():
     db.close()
 
     # Setup SSL cert
-    # ssl_context = SSL.Context(SSL.SSLv23_METHOD)
-    # ssl_context.use_privatekey_file(ROOT_DIR + '/server.key')
-    # ssl_context.use_certificate_file(ROOT_DIR + '/server.crt')
     ssl_context = ('server.crt', 'server.key')
     app.run(debug=True, host='0.0.0.0', port=int(args.port), ssl_context=ssl_context)
     #app.run(debug=True, host='0.0.0.0', port=int(args.port))
