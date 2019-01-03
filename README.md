@@ -60,7 +60,7 @@ With CORS enabled = '*'
 ## Links
 
     https://localhost:8443/api/browse/#/   (GET)
-    https://localhost.santafixie.com:8443/api/  (JSON)
+    https://localhost.domain.com:8443/api/  (JSON)
 
 ## More
 
