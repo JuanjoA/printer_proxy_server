@@ -4,6 +4,8 @@ A Flask server that provides a JSON-RPC interface to an Eltron 2844 CTP label pr
 
 Assumes the printer is named "zebra" by default.
 
+With CORS enabled = '*'
+
 
 ## Install:
 
