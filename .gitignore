@@ -57,3 +57,5 @@ docs/_build/
 *.key
 *.db
 server.csr
+.vscode/launch.json
+.vscode/settings.json

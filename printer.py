@@ -17,7 +17,7 @@ class PrinterController(object):
 
         if format.lower() == "epl2":
             return self.output_epl2(**kwargs)
-        if format.lower() in PIL_SUPPORED_FORMATS:
+        if format.lower() in PIL_SUPPORTED_FORMATS:
             return self.output_img(**kwargs)
 
         return {'success': False, 'error': "Format '%s' not recognized" % format}
@@ -27,10 +27,8 @@ class PrinterController(object):
         '''Print the passed-in EPL2 data.'''
 
         printer = zebra(printer_name)
-
         if isinstance(data, basestring):
             data = [data]
-
         for datum in data:
             if not raw:
                 datum = base64.b64decode(datum)

@@ -118,9 +118,10 @@ def run():
     db.commit()
     db.close()
 
+
     # Setup SSL cert
     ssl_context = ('server.crt', 'server.key')
-    app.run(debug=True, host='0.0.0.0', port=int(args.port), ssl_context=ssl_context)
+    app.run(debug=False, host='0.0.0.0', port=int(args.port), ssl_context=ssl_context)
     #app.run(debug=True, host='0.0.0.0', port=int(args.port))
 
 	
